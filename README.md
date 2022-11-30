@@ -1,5 +1,8 @@
 # traffic_analyzer
 
+# How to compile
+<path_to>/traffic_analyzer/src$ cmake CMakeLists.txt
+
 # How to run
 Usage: traffic_analyzer [options]\
 Options:\
