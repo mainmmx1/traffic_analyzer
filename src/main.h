@@ -30,6 +30,7 @@ typedef union {
 
 #define SNAP_LEN 1518
 
+#define PRINTF_FORMAT_LEN               10 + 1    // "%.15s:%d%s" + '\0'
 #define IP_ADDR_LEN                     15 + 1    // "255.255.255.255" + '\0'
 #define SUCCESS_HASH_TABLE_KEY_LEN      46 + 1    // "255.255.255.255:12345 -> 255.255.255.255:12345" + '\0'
 #define FAILED_HASH_TABLE_KEY_LEN       40 + 1    // "255.255.255.255 -> 255.255.255.255:12345" + '\0'
@@ -73,7 +74,7 @@ char* generate_success_hash_table_key(char *success_hash_table_key, const struct
                                       src_dst_direction_t src_dst_direction);
 char* generate_failed_hash_table_key(char *failed_hash_table_key, const struct ip *ip, const struct tcphdr *tcp);
 char* generate_failed_hash_table_key_full(char *failed_hash_table_key_full, const char *failed_hash_table_key,
-                                          char *left_part, uint16_t port);
+                                          uint16_t port);
 
 void process_tcp_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet);
 void process_syn(char *success_hash_table_key, char *failed_hash_table_key, uint16_t th_sport);

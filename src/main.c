@@ -180,18 +180,15 @@ void print_failed_message(const char *failed_hash_table_key, const char *failed_
     port_count_t port_count;
     port_count.pc = (long)failed_hash_table_value;
 
-    char *failed_hash_table_key_full = malloc(FAILED_HASH_TABLE_KEY_FULL_LEN);
-    char *left_part = malloc(IP_ADDR_LEN);
+    char failed_hash_table_key_full[FAILED_HASH_TABLE_KEY_FULL_LEN] = "";
 
     if (1 == port_count.c) {
-        generate_failed_hash_table_key_full(failed_hash_table_key_full, failed_hash_table_key, left_part, port_count.p);
-        tee(out_file, "FAILED  %s\n",failed_hash_table_key_full);
+        tee(out_file, "FAILED  %s\n",
+            generate_failed_hash_table_key_full(failed_hash_table_key_full, failed_hash_table_key, port_count.p));
     } else {
         tee(out_file, "FAILED  %s (count: %d)\n", failed_hash_table_key, port_count.c);
     }
 
-    free(failed_hash_table_key_full);
-    free(left_part);
 }
 
 void tee(FILE *f, char const *fmt, ...) {
@@ -304,15 +301,14 @@ char* generate_failed_hash_table_key(char *failed_hash_table_key, const struct i
 }
 
 char* generate_failed_hash_table_key_full(char *failed_hash_table_key_full, const char *failed_hash_table_key,
-                                          char *left_part, uint16_t port) {
-    memset(failed_hash_table_key_full, 0, FAILED_HASH_TABLE_KEY_FULL_LEN);
-    memset(left_part, 0, IP_ADDR_LEN);
+                                          uint16_t port) {
+    int src_ip_len = strstr(failed_hash_table_key, ARROW_DELIMITER_STR) - failed_hash_table_key;
 
-    char *arrow = strstr(failed_hash_table_key, ARROW_DELIMITER_STR);
+    char format[PRINTF_FORMAT_LEN] = "";
+    snprintf(format, PRINTF_FORMAT_LEN, "%%.%ds:%%d%%s", src_ip_len);
 
-    strncpy(left_part, failed_hash_table_key, arrow - failed_hash_table_key);
-    snprintf(failed_hash_table_key_full, FAILED_HASH_TABLE_KEY_FULL_LEN, "%s:%d%s",
-             left_part, port, arrow);
+    snprintf(failed_hash_table_key_full, FAILED_HASH_TABLE_KEY_FULL_LEN,
+             format, failed_hash_table_key, port, failed_hash_table_key + src_ip_len);
 
     return failed_hash_table_key_full;
 }

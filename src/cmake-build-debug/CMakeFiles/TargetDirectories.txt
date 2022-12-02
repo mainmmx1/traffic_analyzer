@@ -1,0 +1,3 @@
+/home/mmykhailov/CLionProjects/github/traffic_analyzer/src/cmake-build-debug/CMakeFiles/traffic_analyzer.dir
+/home/mmykhailov/CLionProjects/github/traffic_analyzer/src/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/mmykhailov/CLionProjects/github/traffic_analyzer/src/cmake-build-debug/CMakeFiles/rebuild_cache.dir
